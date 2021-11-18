@@ -1,0 +1,17 @@
+{
+  "name": "geo-elements",
+  "description": "A throw back to the good old days of web 1.0",
+  "version": "0.0.1",
+  "author": "Alex Riviere (https://alex.party)",
+  "license": "MIT",
+  "main":"dist/geo-elements.iife.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "devDependencies": {
+    "sass": "^1.43.4",
+    "vite": "^2.6.4"
+  }
+}
