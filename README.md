@@ -17,6 +17,9 @@ HTML3 had several elements that were deprecated later on, or were never actually
 were both handy and limiting. I recently wanted to learn more about custom elements and how to make them
 So I made this. **GeoElements**! Improving upon the deprecated elements of old, and *improving* them.
 
+## Demo
+
+[Check it out in action!](https://geo-elements.netlify.app/)
 
 ## Features
 
