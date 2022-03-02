@@ -11,23 +11,22 @@ export default class GeoElementFont extends geoExtendElement(
 
   constructor() {
     super();
-    this.attachShadow({ mode: "open" });
     this.#links = new DocumentFragment();
 
     this.#slot = this.cE("slot");
-    
+
     this.#styleElement = this.cE("style");
     this.#updateStyles();
     document.head.appendChild(this.#links);
     this.shadowRoot.append(this.#styleElement, this.#slot);
-    
+
   }
-  
+
   attributeChangedCallback(){
     this.#updateStyles();
   }
-  
-  
+
+
 
   #createStyleLink(href) {
     const link = this.cE("link");
@@ -49,7 +48,7 @@ export default class GeoElementFont extends geoExtendElement(
         );
       }
     });
-    
+
     const fontFamily = face.length ? `font-family:${face.join(",")};`:'';
     const parsedColor = parseSimpleColor(this.getAttribute('color'),undefined);
     const color = parsedColor? `color:${parsedColor};`:'';
@@ -69,11 +68,11 @@ export default class GeoElementFont extends geoExtendElement(
     if(Number.isNaN(sizeAttr)){
       sizeAttr=2;
     }
-    
+
     const size = SIZES[sizeAttr];
 
     this.#styleElement.textContent = `:host{font-size:${size};${fontFamily}${color}}`;
   }
-  
-  
+
+
 }

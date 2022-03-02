@@ -27,7 +27,6 @@ export default class GeoElementMarqee extends geoExtendElement(
 
   constructor(){
     super();
-    this.attachShadow({mode:'open'});
     this.#styleElement = this.cE('style');
     this.#styleElement.textContent = `
     :host{

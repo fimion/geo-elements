@@ -25,7 +25,6 @@ export default class GeoElementImage extends geoExtendElement(
 
   constructor() {
     super();
-    this.attachShadow({ mode: "open" });
 
     this.#image = this.cE("img");
     this.#styleElement = this.cE("style");

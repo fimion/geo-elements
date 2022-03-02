@@ -11,7 +11,6 @@ class GeoElementBackground extends geoExtendElement(
 
   constructor() {
     super();
-    this.attachShadow({ mode: "open" });
     this.#wrapper = this.cE("slot");
     // this.#wrapper.classList.add("background");
     // add our magical description div

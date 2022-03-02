@@ -5,7 +5,6 @@ export default class GeoElementCenter extends geoExtendElement('ge-center'){
   #styleElement;
   constructor(){
     super();
-    this.attachShadow({mode:'open'});
     this.#slotElement = this.cE('slot');
     this.#styleElement = this.cE('style');
     this.#styleElement.textContent = 'slot{display:block; text-align:center}';
