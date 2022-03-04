@@ -24,6 +24,7 @@ export default class GeoElementMarqee extends geoExtendElement(
   #styleElement;
   #divElement;
   #currentAnimation;
+  #reducedMotion;
 
   constructor(){
     super();
@@ -42,11 +43,26 @@ export default class GeoElementMarqee extends geoExtendElement(
     overflow-y: hidden;
     white-space: initial;
     }
+    
+    @media (prefers-reduced-motion:reduce){
+      :host{
+        overflow-x: auto;
+      }
+      :host([direction="up"]), :host([direction="down"]){
+        overflow-y: scroll;
+      }
+    }
+    
     `;
     this.#divElement = this.cE('div');
     this.#divElement.append(this.cE('slot'))
     this.shadowRoot.append(this.#styleElement, this.#divElement);
     this.#currentAnimation = null;
+
+    this.#reducedMotion = window.matchMedia('(prefers-reduced-motion:reduce)');
+
+    this.#reducedMotion.addEventListener('change',this.#updateScroll.bind(this));
+
   }
 
   #getScrollWidth(){
@@ -107,6 +123,12 @@ export default class GeoElementMarqee extends geoExtendElement(
       }
     }
     if(this.#currentAnimation) this.#currentAnimation.cancel();
+    console.log(this.#reducedMotion);
+    if(this.#reducedMotion.matches){
+      this.tabIndex = 1;
+      return;
+    }
+    this.removeAttribute('tabindex');
     this.#currentAnimation = this.#divElement.animate([
           {transform: start},
           {transform: end},
