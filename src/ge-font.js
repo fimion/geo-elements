@@ -11,7 +11,7 @@ export default class GeoElementFont extends geoExtendElement(
 
   constructor() {
     super();
-    this.#links = new DocumentFragment();
+    this.#links = this.jj.style;
 
     this.#slot = this.cE("slot");
 
@@ -29,25 +29,26 @@ export default class GeoElementFont extends geoExtendElement(
 
 
   #createStyleLink(href) {
-    const link = this.cE("link");
-    link.rel = "stylesheet";
-    link.href = href;
-    return link;
+    return `@import url(${href});`;
   }
 
   #updateStyles() {
     const face = parseCSSList(this.getAttribute("face") || "");
+    const imports = [];
     face.forEach((fontName) => {
       if(fontName === "") return;
+
       if (!document.fonts.check(`1rem ${fontName}`)) {
         const googleFont = encodeURI(fontName.replaceAll(/(^\'|\'$)/g,'')).replaceAll('%20','+');
-        this.#links.prepend(
+        imports.push(
           this.#createStyleLink(
             `https://fonts.googleapis.com/css2?family=${googleFont}&display=swap`
           )
         );
       }
     });
+
+    this.#links.textContent = imports.join('');
 
     const fontFamily = face.length ? `font-family:${face.join(",")};`:'';
     const parsedColor = parseSimpleColor(this.getAttribute('color'),undefined);
