@@ -15,10 +15,9 @@ const DIALUP_TIME = 10000;
 export default class GeoElementImage extends geoExtendElement(
   "ge-img",
   HTMLElement,
-  { attrs: IMG_ATTRS }
+  { attrs: IMG_ATTRS, noSlot:true }
 ) {
   #image;
-  #styleElement;
   #placeHolder;
 
   static #promiseList = [Promise.resolve()];
@@ -27,11 +26,21 @@ export default class GeoElementImage extends geoExtendElement(
     super();
 
     this.#image = this.cE("img");
-    this.#styleElement = this.cE("style");
     this.#placeHolder = this.cE("span");
-    this.#styleElement.textContent = `img.loading{clip-path: inset(0 0 100% 0); height:0; width:0;} span{display: inline-block;height:16px;width:16px; border: 2px grey inset;}`;
+    this.css`
+      img.loading{
+        clip-path: inset(0 0 100% 0); 
+        height:0; 
+        width:0;
+      } 
+      span{
+        display: inline-block;
+        height:16px;
+        width:16px;
+        border: 2px grey inset;
+      }`;
 
-    this.shadowRoot.append(this.#styleElement, this.#image, this.#placeHolder);
+    this.shadowRoot.append(this.#image, this.#placeHolder);
   }
 
   attributeChangedCallback(attr, oldValue, newValue) {
@@ -58,7 +67,7 @@ export default class GeoElementImage extends geoExtendElement(
   updateImage() {
     IMG_ATTRS.forEach((attr) => {
       if (this.hasAttribute(attr)) {
-        this.#image[attr] = this.getAttribute(attr);
+        this.#image[attr] = this.attrs[attr];
       }
     });
   }

@@ -2,6 +2,9 @@
 export const PARSE_CSS_LIST = /,(?=(?:(?:[^"']*"[^"']*")|(?:[^'"]*'[^'"]*'))*[^"']*$)/g
 
 export function parseCSSList(value) {
+  if(typeof value !== 'string'){
+    return [];
+  }
   return value
       .replaceAll(PARSE_CSS_LIST, String.fromCodePoint(0))
       .replace(/;/, '')
@@ -14,18 +17,29 @@ export function parseSimpleColor(colorString, def = undefined) {
   return COLOR_PARSE_REGEX.test(colorString) ? colorString : def
 }
 
+/**
+ *
+ * @param {string} elementName
+ * @param {HTMLElement} nativeElement
+ * @param {object} options
+ * @returns {HTMLElement}
+ */
 export function geoExtendElement(elementName, nativeElement = HTMLElement, options = {}) {
 
-  const {attrs} = options
+  const {attrs, noSlot} = options
 
   return class extends nativeElement {
 
-    #jj
-    #refs
+    #jj;
+    #refs;
+    #attrs;
+    #styleElement;
+    #slotElement;
 
     constructor(...args) {
       super(...args)
       this.attachShadow({mode: 'open'})
+
 
       this.#jj = new Proxy(() => {
       }, {
@@ -45,10 +59,52 @@ export function geoExtendElement(elementName, nativeElement = HTMLElement, optio
           return this.shadowRoot.querySelectorAll(`[ref="${prop}"]`)
         },
       })
+
+      this.#attrs = new Proxy({}, {
+        get:(obj, prop) =>{
+          if (prop in obj) return Reflect.get(...arguments)
+          if(Array.isArray(attrs) && attrs.includes(prop)){
+            return this.getAttribute(prop);
+          }
+          if(typeof attrs === 'object' && prop in attrs){
+            return this.getAttribute(prop) || attrs[prop];
+          }
+          return undefined;
+        }
+      })
+
+      this.#slotElement = this.jj.slot;
+
+      this.#styleElement = this.jj.style;
+      this.shadowRoot.append(this.#styleElement);
+      if(!noSlot){
+        this.shadowRoot.append(this.#slotElement);
+      }
+
+    }
+
+    get slotElement(){
+      return this.#slotElement;
+    }
+
+    get styleElement(){
+      return this.#styleElement;
+    }
+
+    css(stringParts, ...valueParts){
+      const style = stringParts.reduce((acc, el, index)=>{
+        return acc+el + (valueParts[index]||'');
+      },'');
+      this.#styleElement.textContent = style;
+      return this.#styleElement;
     }
 
     get jj() {
       return this.#jj
+    }
+
+    get attrs(){
+      return this.#attrs;
     }
 
     get refs() {
@@ -64,7 +120,8 @@ export function geoExtendElement(elementName, nativeElement = HTMLElement, optio
     }
 
     static get observedAttributes() {
-      return attrs
+      if(Array.isArray(attrs)) return attrs;
+      return Object.keys(attrs);
     }
 
     /**

@@ -6,34 +6,23 @@ export default class GeoElementFont extends geoExtendElement(
   { attrs: ["face", "color", "size"] }
 ) {
   #links;
-  #slot;
-  #styleElement;
-
   constructor() {
     super();
     this.#links = this.jj.style;
-
-    this.#slot = this.cE("slot");
-
-    this.#styleElement = this.cE("style");
     this.#updateStyles();
     document.head.appendChild(this.#links);
-    this.shadowRoot.append(this.#styleElement, this.#slot);
-
   }
 
   attributeChangedCallback(){
     this.#updateStyles();
   }
 
-
-
   #createStyleLink(href) {
     return `@import url(${href});`;
   }
 
   #updateStyles() {
-    const face = parseCSSList(this.getAttribute("face") || "");
+    const face = parseCSSList(this.attrs.face);
     const imports = [];
     face.forEach((fontName) => {
       if(fontName === "") return;
@@ -51,12 +40,12 @@ export default class GeoElementFont extends geoExtendElement(
     this.#links.textContent = imports.join('');
 
     const fontFamily = face.length ? `font-family:${face.join(",")};`:'';
-    const parsedColor = parseSimpleColor(this.getAttribute('color'),undefined);
+    const parsedColor = parseSimpleColor(this.attrs.color,undefined);
     const color = parsedColor? `color:${parsedColor};`:'';
     const SIZES = ['0.5rem','0.75rem','1rem','1.5rem','2rem','2.5rem','3rem'];
     let sizeAttr;
     try{
-      sizeAttr = parseInt(this.getAttribute('size'))-1;
+      sizeAttr = parseInt(this.attrs.size)-1;
       if(sizeAttr < 0){
         sizeAttr = 2;
       }else if(sizeAttr > 6){
@@ -67,12 +56,16 @@ export default class GeoElementFont extends geoExtendElement(
       sizeAttr = 2;
     }
     if(Number.isNaN(sizeAttr)){
-      sizeAttr=2;
+      sizeAttr = 2;
     }
 
     const size = SIZES[sizeAttr];
 
-    this.#styleElement.textContent = `:host{font-size:${size};${fontFamily}${color}}`;
+    this.css`
+      :host{
+        font-size:${size};
+        ${fontFamily}${color}
+      }`;
   }
 
 

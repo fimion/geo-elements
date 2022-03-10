@@ -1,39 +1,39 @@
 import { geoExtendElement, parseSimpleColor } from "./ge-shared.js";
-import styles from './ge-background.scss';
+
+const BACKGROUND_ATTRS = {
+  background:"",
+  bgcolor:"transparent",
+  alt: "A scene so horrific that it defies explanation and has driven anyone who looks at it into a deep insanity or they forgot to write an alt attribute. Sorry.",
+}
+
+
 class GeoElementBackground extends geoExtendElement(
   "ge-background",
   HTMLElement,
-  { attrs: ["background", "bgcolor", "alt"] }
+  { attrs: BACKGROUND_ATTRS }
 ) {
-  #wrapper;
-  #styleElement;
   #a11y;
 
   constructor() {
     super();
-    this.#wrapper = this.cE("slot");
     // this.#wrapper.classList.add("background");
     // add our magical description div
-    this.#a11y = this.cE("div");
+    this.#a11y = this.jj.span;
     // this.#wrapper.append(this.#a11y);
-
-    this.#styleElement = this.cE("style");
     // this.#wrapper.append(this.cE("slot"));
-    this.shadowRoot.append(this.#styleElement, this.#a11y, this.#wrapper);
+    this.shadowRoot.append(this.#a11y);
   }
 
   #setStyle() {
-    const image = (this.getAttribute("background") || "").replaceAll(
+    const image = (this.attrs.background).replaceAll(
       `'`,
       encodeURI(`'`)
     ).replaceAll('\\',encodeURI('\\'));
-    const color = parseSimpleColor(this.getAttribute("bgcolor"), "transparent");
+    const color = parseSimpleColor(this.attrs.bgcolor, "transparent");
 
     if (image !== "") {
       const alt =
-        "This has a horrible background image: " +
-        (this.getAttribute("alt") ||
-          "A scene so horrific that it defies explanation and has driven anyone who looks at it into a deep insanity or they forgot to write an alt attribute. Sorry.");
+        "This has a horrible background image: " + this.attrs.alt;
       this.#a11y.setAttribute("role", "img");
       this.#a11y.setAttribute("aria-label", alt);
     } else {
@@ -41,7 +41,26 @@ class GeoElementBackground extends geoExtendElement(
       this.#a11y.removeAttribute("aria-label");
     }
 
-    this.#styleElement.textContent = this.__templateStyle({image, color}, styles);
+    this.css`
+      :host {
+        display:block;
+      }
+      :host([background]){
+        background-image: url('${image}');
+      }
+      :host([bgcolor]){
+        background-color: ${color};
+      }
+      :host-context(body){
+        min-height: 100vh;
+        min-width: 100%;
+      }
+      :host([inline]){
+        display:inline-block;
+        min-height: initial;
+        min-width: initial;
+      }
+    `;
   }
 
   attributeChangedCallback() {
