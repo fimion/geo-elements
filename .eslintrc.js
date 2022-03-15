@@ -1,7 +1,7 @@
 module.exports = {
   extends: [
-    'tjw-base'
-    // 'tjw-import',
+    'tjw-base',
+    'tjw-import'
     // 'tjw-jsdoc'
   ],
   globals: {

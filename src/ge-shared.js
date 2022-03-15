@@ -1,5 +1,5 @@
 // Stolen from https://stackoverflow.com/a/39597017
-export const PARSE_CSS_LIST = /,(?=(?:(?:[^"']*"[^"']*")|(?:[^'"]*'[^'"]*'))*[^"']*$)/g;
+const PARSE_CSS_LIST = /,(?=(?:(?:[^"']*"[^"']*")|(?:[^'"]*'[^'"]*'))*[^"']*$)/g;
 
 export function parseCSSList (value) {
   if (typeof value !== 'string') {
@@ -11,7 +11,7 @@ export function parseCSSList (value) {
     .split(String.fromCodePoint(0));
 }
 
-export const COLOR_PARSE_REGEX = /((^[\w]+$)|(^\#[a-f\d]{3,6}$))/i;
+const COLOR_PARSE_REGEX = /((^[\w]+$)|(^\#[a-f\d]{3,6}$))/i;
 
 export function parseSimpleColor (colorString, def = undefined) {
   return COLOR_PARSE_REGEX.test(colorString) ? colorString : def;

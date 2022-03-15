@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies, import/no-anonymous-default-export, import/no-unused-modules */
 import { defineConfig } from 'vite';
 
 export default defineConfig({
@@ -10,7 +11,9 @@ export default defineConfig({
       entry: './src/main.js',
       formats: ['iife'],
       name: 'GeoElements',
-      fileName: (format)=>`geo-elements.${format}.js`
+      fileName: (format) => {
+        return `geo-elements.${format}.js`;
+      }
     }
   }
 });
