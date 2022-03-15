@@ -4,14 +4,22 @@
   "version": "0.0.4",
   "author": "Alex Riviere (https://alex.party)",
   "license": "MIT",
-  "main":"dist/geo-elements.iife.js",
+  "main": "dist/geo-elements.iife.js",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "build:docs": "vite build --config vite.docs.js ",
-    "serve": "vite --config vite.docs.js"
+    "serve": "vite --config vite.docs.js",
+    "lint": "eslint --config=.eslintrc.js .eslintrc.js vite.config.js vite.docs.js src",
+    "fix": "eslint --fix --config=.eslintrc.js .eslintrc.js vite.config.js vite.docs.js src"
   },
   "devDependencies": {
+    "eslint": "^8.11.0",
+    "eslint-config-tjw-base": "^2.0.0",
+    "eslint-config-tjw-import": "^1.0.0",
+    "eslint-config-tjw-jsdoc": "^1.0.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-jsdoc": "^38.0.4",
     "sass": "^1.43.4",
     "vite": "^2.6.4"
   }
