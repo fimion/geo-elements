@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * @file    Handles CSS background properties``
+ * @file    Handles CSS background properties
  * @author  Fimion
  */
 
