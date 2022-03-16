@@ -1,7 +1,7 @@
-import { geoExtendElement } from "./ge-shared.js";
+import { geoExtendElement } from './ge-shared.js';
 
-export default class GeoElementBlink extends geoExtendElement('ge-blink'){
-  constructor(){
+export default class GeoElementBlink extends geoExtendElement('ge-blink') {
+  constructor () {
     super();
     this.css`
     :host{
@@ -11,7 +11,7 @@ export default class GeoElementBlink extends geoExtendElement('ge-blink'){
     slot{
       animation: 2s linear infinite condemned_blink_effect;
     }
-    
+
     @keyframes condemned_blink_effect {
       0% {visibility: hidden;}
       50% {visibility: hidden;}

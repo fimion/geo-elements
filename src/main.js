@@ -1,8 +1,8 @@
 import GeoElementBackground from './ge-background.js';
+import GeoElementBlink from './ge-blink.js';
+import GeoElementCenter from './ge-center.js';
 import GeoElementFont from './ge-font.js';
 import GeoElementImage from './ge-img.js';
-import GeoElementCenter from './ge-center.js';
-import GeoElementBlink from './ge-blink.js';
 import GeoElementMarquee from './ge-marquee.js';
 import styles from './ge-styles.css';
 

@@ -1,20 +1,20 @@
-import { geoExtendElement, parseSimpleColor } from "./ge-shared.js";
+import { geoExtendElement, parseSimpleColor } from './ge-shared.js';
 
 const BACKGROUND_ATTRS = {
-  background:"",
-  bgcolor:"transparent",
-  alt: "A scene so horrific that it defies explanation and has driven anyone who looks at it into a deep insanity or they forgot to write an alt attribute. Sorry.",
-}
+  background: '',
+  bgcolor: 'transparent',
+  alt: 'A scene so horrific that it defies explanation and has driven anyone who looks at it into a deep insanity or they forgot to write an alt attribute. Sorry.'
+};
 
 
 class GeoElementBackground extends geoExtendElement(
-  "ge-background",
+  'ge-background',
   HTMLElement,
   { attrs: BACKGROUND_ATTRS }
 ) {
   #a11y;
 
-  constructor() {
+  constructor () {
     super();
     // this.#wrapper.classList.add("background");
     // add our magical description div
@@ -24,21 +24,21 @@ class GeoElementBackground extends geoExtendElement(
     this.shadowRoot.append(this.#a11y);
   }
 
-  #setStyle() {
+  #setStyle () {
     const image = (this.attrs.background).replaceAll(
-      `'`,
-      encodeURI(`'`)
-    ).replaceAll('\\',encodeURI('\\'));
-    const color = parseSimpleColor(this.attrs.bgcolor, "transparent");
+      '\'',
+      encodeURI('\'')
+    ).replaceAll('\\', encodeURI('\\'));
+    const color = parseSimpleColor(this.attrs.bgcolor, 'transparent');
 
-    if (image !== "") {
+    if (image !== '') {
       const alt =
-        "This has a horrible background image: " + this.attrs.alt;
-      this.#a11y.setAttribute("role", "img");
-      this.#a11y.setAttribute("aria-label", alt);
+        'This has a horrible background image: ' + this.attrs.alt;
+      this.#a11y.setAttribute('role', 'img');
+      this.#a11y.setAttribute('aria-label', alt);
     } else {
-      this.#a11y.removeAttribute("role");
-      this.#a11y.removeAttribute("aria-label");
+      this.#a11y.removeAttribute('role');
+      this.#a11y.removeAttribute('aria-label');
     }
 
     this.css`
@@ -63,7 +63,7 @@ class GeoElementBackground extends geoExtendElement(
     `;
   }
 
-  attributeChangedCallback() {
+  attributeChangedCallback () {
     this.#setStyle();
   }
 }

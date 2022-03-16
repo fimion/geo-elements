@@ -1,34 +1,34 @@
-import { geoExtendElement, parseCSSList, parseSimpleColor } from "./ge-shared.js";
+import { geoExtendElement, parseCSSList, parseSimpleColor } from './ge-shared.js';
 
 export default class GeoElementFont extends geoExtendElement(
-  "ge-font",
+  'ge-font',
   HTMLElement,
-  { attrs: ["face", "color", "size"] }
+  { attrs: ['face', 'color', 'size'] }
 ) {
   #links;
-  constructor() {
+  constructor () {
     super();
     this.#links = this.jj.style;
     this.#updateStyles();
     document.head.appendChild(this.#links);
   }
 
-  attributeChangedCallback(){
+  attributeChangedCallback () {
     this.#updateStyles();
   }
 
-  #createStyleLink(href) {
+  #createStyleLink (href) {
     return `@import url(${href});`;
   }
 
-  #updateStyles() {
+  #updateStyles () {
     const face = parseCSSList(this.attrs.face);
     const imports = [];
     face.forEach((fontName) => {
-      if(fontName === "") return;
+      if (fontName === '') {return;}
 
       if (!document.fonts.check(`1rem ${fontName}`)) {
-        const googleFont = encodeURI(fontName.replaceAll(/(^\'|\'$)/g,'')).replaceAll('%20','+');
+        const googleFont = encodeURI(fontName.replaceAll(/(^\'|\'$)/g, '')).replaceAll('%20', '+');
         imports.push(
           this.#createStyleLink(
             `https://fonts.googleapis.com/css2?family=${googleFont}&display=swap`
@@ -39,23 +39,23 @@ export default class GeoElementFont extends geoExtendElement(
 
     this.#links.textContent = imports.join('');
 
-    const fontFamily = face.length ? `font-family:${face.join(",")};`:'';
-    const parsedColor = parseSimpleColor(this.attrs.color,undefined);
-    const color = parsedColor? `color:${parsedColor};`:'';
-    const SIZES = ['0.5rem','0.75rem','1rem','1.5rem','2rem','2.5rem','3rem'];
+    const fontFamily = face.length ? `font-family:${face.join(',')};` : '';
+    const parsedColor = parseSimpleColor(this.attrs.color, undefined);
+    const color = parsedColor ? `color:${parsedColor};` : '';
+    const SIZES = ['0.5rem', '0.75rem', '1rem', '1.5rem', '2rem', '2.5rem', '3rem'];
     let sizeAttr;
-    try{
-      sizeAttr = parseInt(this.attrs.size)-1;
-      if(sizeAttr < 0){
+    try {
+      sizeAttr = parseInt(this.attrs.size) - 1;
+      if (sizeAttr < 0) {
         sizeAttr = 2;
-      }else if(sizeAttr > 6){
+      } else if (sizeAttr > 6) {
         sizeAttr = 2;
       }
-    }catch(e){
+    } catch (e) {
       e.preventDefault();
       sizeAttr = 2;
     }
-    if(Number.isNaN(sizeAttr)){
+    if (Number.isNaN(sizeAttr)) {
       sizeAttr = 2;
     }
 
@@ -67,6 +67,4 @@ export default class GeoElementFont extends geoExtendElement(
         ${fontFamily}${color}
       }`;
   }
-
-
 }

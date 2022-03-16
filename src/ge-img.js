@@ -1,38 +1,38 @@
-import { geoExtendElement } from "./ge-shared.js";
+import { geoExtendElement } from './ge-shared.js';
 
 const IMG_ATTRS = [
-  "alt",
-  "height",
-  "loading",
-  "sizes",
-  "src",
-  "srcset",
-  "width"
+  'alt',
+  'height',
+  'loading',
+  'sizes',
+  'src',
+  'srcset',
+  'width'
 ];
 
 const DIALUP_TIME = 10000;
 
 export default class GeoElementImage extends geoExtendElement(
-  "ge-img",
+  'ge-img',
   HTMLElement,
-  { attrs: IMG_ATTRS, noSlot:true }
+  { attrs: IMG_ATTRS, noSlot: true }
 ) {
   #image;
   #placeHolder;
 
   static #promiseList = [Promise.resolve()];
 
-  constructor() {
+  constructor () {
     super();
 
-    this.#image = this.cE("img");
-    this.#placeHolder = this.cE("span");
+    this.#image = this.cE('img');
+    this.#placeHolder = this.cE('span');
     this.css`
       img.loading{
-        clip-path: inset(0 0 100% 0); 
-        height:0; 
+        clip-path: inset(0 0 100% 0);
+        height:0;
         width:0;
-      } 
+      }
       span{
         display: inline-block;
         height:16px;
@@ -43,28 +43,28 @@ export default class GeoElementImage extends geoExtendElement(
     this.shadowRoot.append(this.#image, this.#placeHolder);
   }
 
-  attributeChangedCallback(attr, oldValue, newValue) {
+  attributeChangedCallback (attr/* , oldValue, newValue */) {
     this.updateImage();
-    if (attr === "src" || attr === "srcset") {
+    if (attr === 'src' || attr === 'srcset') {
       this.updateAnimation();
     }
   }
 
-  #animationOffsetPromise(finished) {
+  #animationOffsetPromise (finished) {
     return new Promise((resolve) => {
       finished.then((result) => resolve(result));
     });
   }
 
-  set #animationOffset(finished) {
+  set #animationOffset (finished) {
     GeoElementImage.#promiseList.push(this.#animationOffsetPromise(finished));
   }
 
-  get #animationOffset() {
+  get #animationOffset () {
     return GeoElementImage.#promiseList[GeoElementImage.#promiseList.length - 1];
   }
 
-  updateImage() {
+  updateImage () {
     IMG_ATTRS.forEach((attr) => {
       if (this.hasAttribute(attr)) {
         this.#image[attr] = this.attrs[attr];
@@ -72,27 +72,29 @@ export default class GeoElementImage extends geoExtendElement(
     });
   }
 
-  updateAnimation() {
+  updateAnimation () {
     this.shadowRoot.append(this.#placeHolder);
-    this.#image.classList.add("loading");
+    this.#image.classList.add('loading');
     const animation = this.#image.animate(
-      [{ clipPath: "inset(0 0 100% 0)" }, { clipPath: "inset(0 0 0 0)" }],
+      [{ clipPath: 'inset(0 0 100% 0)' }, { clipPath: 'inset(0 0 0 0)' }],
       DIALUP_TIME
     );
+    /*
     const animationPromise = animation.finished.then(() => {
-      this.#image.classList.remove("loading");
+      this.#image.classList.remove('loading');
       return Promise.resolve();
     });
+    */
 
     animation.pause();
 
     this.#animationOffset.then(() => {
-      this.#image.classList.remove("loading");
+      this.#image.classList.remove('loading');
       this.shadowRoot.removeChild(this.#placeHolder);
       if (this.#image.complete) {
         animation.play();
       } else {
-        this.#image.addEventListener("load", () => {
+        this.#image.addEventListener('load', () => {
           animation.play();
         });
       }
