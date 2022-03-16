@@ -17,9 +17,7 @@
     "eslint": "^8.11.0",
     "eslint-config-tjw-base": "^2.0.0",
     "eslint-config-tjw-import": "^1.0.0",
-    "eslint-config-tjw-jsdoc": "^1.0.0",
     "eslint-plugin-import": "^2.25.4",
-    "eslint-plugin-jsdoc": "^38.0.4",
     "sass": "^1.43.4",
     "vite": "^2.6.4"
   }
