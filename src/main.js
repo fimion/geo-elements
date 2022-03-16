@@ -1,3 +1,9 @@
+'use strict';
+/**
+ * @file    Entry point for the library. Exposes the external facing function that accepts the input defined in the API documentation.
+ * @author  TheJaredWilcurt
+ */
+
 import GeoElementBackground from './ge-background.js';
 import GeoElementBlink from './ge-blink.js';
 import GeoElementCenter from './ge-center.js';

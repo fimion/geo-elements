@@ -1,3 +1,10 @@
+'use strict';
+
+/**
+ * @file    Handles CSS background properties``
+ * @author  Fimion
+ */
+
 import { geoExtendElement, parseSimpleColor } from './ge-shared.js';
 
 const BACKGROUND_ATTRS = {
@@ -14,6 +21,9 @@ class GeoElementBackground extends geoExtendElement(
 ) {
   #a11y;
 
+  /**
+   * Constructor description.
+   */
   constructor () {
     super();
     // this.#wrapper.classList.add("background");
@@ -24,6 +34,9 @@ class GeoElementBackground extends geoExtendElement(
     this.shadowRoot.append(this.#a11y);
   }
 
+  /**
+   * Set style description.
+   */
   #setStyle () {
     const image = (this.attrs.background).replaceAll(
       '\'',
@@ -63,6 +76,9 @@ class GeoElementBackground extends geoExtendElement(
     `;
   }
 
+  /**
+   * Attribute changed callback description.
+   */
   attributeChangedCallback () {
     this.#setStyle();
   }
