@@ -20,7 +20,7 @@ export function parseSimpleColor (colorString, def = undefined) {
 /**
  * @returns {CSSStyleSheet} returns an empty CSSStyleSheet for inserting rules into.
  */
-export function getCSSStyleSheet(){
+function getCSSStyleSheet () {
   const stylesheet = document.createElement('style');
   document.head.append(stylesheet);
   const sheet = stylesheet.sheet;
@@ -33,11 +33,11 @@ export function getCSSStyleSheet(){
  * @param {string} property - css property to be tested
  * @param {string} value - the value to be tested;
  */
-export function validateCSSRule(property, value){
+export function validateCSSRule (property, value) {
   const style = getCSSStyleSheet();
   try {
     style.insertRule(`#thing{${property}:${value};}`);
-  } catch(e){
+  } catch (e) {
     console.error(`The value '${value}' could not be applied as '${property}'.`);
     return;
   }

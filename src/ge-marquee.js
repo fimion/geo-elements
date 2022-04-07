@@ -1,4 +1,4 @@
-import {geoExtendElement, validateCSSRule} from "./ge-shared.js";
+import { geoExtendElement, validateCSSRule } from './ge-shared.js';
 
 const MARQUEE_ATTRS = {
   behavior: 'scroll',
@@ -26,28 +26,27 @@ export default class GeoElementMarqee extends geoExtendElement(
 
   constructor () {
     super();
-    this.#divElement = this.jj.div
-    this.#divElement.part = 'wrapper'
-    this.#divElement.append(this.slotElement)
-    this.shadowRoot.append(this.#divElement)
-    this.#currentAnimation = null
+    this.#divElement = this.jj.div;
+    this.#divElement.part = 'wrapper';
+    this.#divElement.append(this.slotElement);
+    this.shadowRoot.append(this.#divElement);
+    this.#currentAnimation = null;
 
-    this.#reducedMotion = window.matchMedia('(prefers-reduced-motion:reduce)')
+    this.#reducedMotion = window.matchMedia('(prefers-reduced-motion:reduce)');
 
-    this.#reducedMotion.addEventListener('change', this.#updateScroll.bind(this))
-
+    this.#reducedMotion.addEventListener('change', this.#updateScroll.bind(this));
   }
 
-  #getScrollWidth() {
+  #getScrollWidth () {
     const div = this.jj.div;
-    div.innerText = this.innerText
-    this.shadowRoot.append(div)
-    const mySize = div.scrollWidth
-    this.shadowRoot.removeChild(div)
-    return mySize
+    div.innerText = this.innerText;
+    this.shadowRoot.append(div);
+    const mySize = div.scrollWidth;
+    this.shadowRoot.removeChild(div);
+    return mySize;
   }
 
-  #updateStyle(){
+  #updateStyle () {
     const validBgcolor = validateCSSRule('background-color', this.attrs.bgcolor) || MARQUEE_ATTRS.bgcolor;
     this.css`
       :host {
@@ -77,24 +76,6 @@ export default class GeoElementMarqee extends geoExtendElement(
           overflow-y: scroll;
         }
       }`;
-    this.#divElement = this.jj.div;
-    this.#divElement.part = 'wrapper';
-    this.#divElement.append(this.slotElement);
-    this.shadowRoot.append(this.#divElement);
-    this.#currentAnimation = null;
-
-    this.#reducedMotion = window.matchMedia('(prefers-reduced-motion:reduce)');
-
-    this.#reducedMotion.addEventListener('change', this.#updateScroll.bind(this));
-  }
-
-  #getScrollWidth () {
-    const div = this.jj.div;
-    div.innerText = this.innerText;
-    this.shadowRoot.append(div);
-    const mySize = div.scrollWidth;
-    this.shadowRoot.removeChild(div);
-    return mySize;
   }
 
   #updateScroll () {
