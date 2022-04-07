@@ -1,3 +1,4 @@
+
 'use strict';
 
 /**
@@ -5,7 +6,8 @@
  * @author  Fimion
  */
 
-import { geoExtendElement } from './ge-shared.js';
+import { geoExtendElement, validateCSSRule } from './ge-shared.js';
+
 
 const MARQUEE_ATTRS = {
   behavior: 'scroll',
@@ -46,6 +48,28 @@ export default class GeoElementMarqee extends geoExtendElement(
    */
   constructor () {
     super();
+    this.#divElement = this.jj.div;
+    this.#divElement.part = 'wrapper';
+    this.#divElement.append(this.slotElement);
+    this.shadowRoot.append(this.#divElement);
+    this.#currentAnimation = null;
+
+    this.#reducedMotion = window.matchMedia('(prefers-reduced-motion:reduce)');
+
+    this.#reducedMotion.addEventListener('change', this.#updateScroll.bind(this));
+  }
+
+  #getScrollWidth () {
+    const div = this.jj.div;
+    div.innerText = this.innerText;
+    this.shadowRoot.append(div);
+    const mySize = div.scrollWidth;
+    this.shadowRoot.removeChild(div);
+    return mySize;
+  }
+
+  #updateStyle () {
+    const validBgcolor = validateCSSRule('background-color', this.attrs.bgcolor) || MARQUEE_ATTRS.bgcolor;
     this.css`
       :host {
         display: inline-block;
@@ -54,6 +78,7 @@ export default class GeoElementMarqee extends geoExtendElement(
         white-space: nowrap;
         width: -webkit-fill-available;
         max-width: 100%;
+        background-color:${validBgcolor};
       }
 
       :host([direction="up"]),
@@ -73,35 +98,13 @@ export default class GeoElementMarqee extends geoExtendElement(
           overflow-y: scroll;
         }
       }`;
-    this.#divElement = this.jj.div;
-    this.#divElement.part = 'wrapper';
-    this.#divElement.append(this.slotElement);
-    this.shadowRoot.append(this.#divElement);
-    this.#currentAnimation = null;
-
-    this.#reducedMotion = window.matchMedia('(prefers-reduced-motion:reduce)');
-
-    this.#reducedMotion.addEventListener('change', this.#updateScroll.bind(this));
-  }
-
-  /**
-   * Get scroll width description.
-   *
-   * @return {[type]} [description]
-   */
-  #getScrollWidth () {
-    const div = this.jj.div;
-    div.innerText = this.innerText;
-    this.shadowRoot.append(div);
-    const mySize = div.scrollWidth;
-    this.shadowRoot.removeChild(div);
-    return mySize;
   }
 
   /**
    * Update scroll description.
    */
   #updateScroll () {
+    this.#updateStyle();
     const scrollAmount = Number(this.attrs.scrollamount);
     const trueSpeed = typeof this.attrs.truespeed === 'string';
     const tempDelay = Number(this.attrs.scrolldelay);

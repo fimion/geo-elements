@@ -21,6 +21,20 @@ So I made this. **GeoElements**! Improving upon the deprecated elements of old, 
 
 [Check it out in action!](https://geo-elements.netlify.app/)
 
+## Praise?
+
+> "Geo-Elements 'Definitely something you could use'"
+
+-Dave Rupert
+
+>"Alex, no"
+
+-Andrew Walpole (My boss)
+
+>"what's geocities?"
+
+-ginger
+
 ## Features
 
 - It's like HTML3 all over again!

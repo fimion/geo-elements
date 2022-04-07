@@ -38,7 +38,35 @@ export function parseSimpleColor (colorString, def = undefined) {
 }
 
 /**
- * Geo extend element description.
+ * @returns {CSSStyleSheet} returns an empty CSSStyleSheet for inserting rules into.
+ */
+function getCSSStyleSheet () {
+  const stylesheet = document.createElement('style');
+  document.head.append(stylesheet);
+  const sheet = stylesheet.sheet;
+  document.head.removeChild(stylesheet);
+  return sheet;
+}
+
+/**
+ *
+ * @param {string} property - css property to be tested
+ * @param {string} value - the value to be tested;
+ */
+export function validateCSSRule (property, value) {
+  const style = getCSSStyleSheet();
+  try {
+    style.insertRule(`#thing{${property}:${value};}`);
+  } catch (e) {
+    console.error(`The value '${value}' could not be applied as '${property}'.`);
+    return;
+  }
+
+  return style.cssRules.item(0).styleMap.get(property);
+}
+
+/**
+ * Geo extend element description
  *
  * @param  {string}      elementName    [description]
  * @param  {HTMLElement} nativeElement  [description]
