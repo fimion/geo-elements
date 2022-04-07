@@ -1,4 +1,4 @@
-import { geoExtendElement } from './ge-shared.js';
+import { geoExtendElement, validateCSSRule } from './ge-shared.js';
 
 const MARQUEE_ATTRS = {
   behavior: 'scroll',
@@ -26,33 +26,6 @@ export default class GeoElementMarqee extends geoExtendElement(
 
   constructor () {
     super();
-    this.css`
-      :host {
-        display: inline-block;
-        overflow: hidden;
-        text-align: initial;
-        white-space: nowrap;
-        width: -webkit-fill-available;
-        max-width: 100%;
-      }
-
-      :host([direction="up"]),
-      :host([direction="down"]) {
-        overflow: initial;
-        overflow-y: hidden;
-        white-space: initial;
-      }
-
-      @media (prefers-reduced-motion: reduce) {
-        :host {
-          overflow-x: auto;
-        }
-
-        :host([direction="up"]),
-        :host([direction="down"]) {
-          overflow-y: scroll;
-        }
-      }`;
     this.#divElement = this.jj.div;
     this.#divElement.part = 'wrapper';
     this.#divElement.append(this.slotElement);
@@ -73,7 +46,40 @@ export default class GeoElementMarqee extends geoExtendElement(
     return mySize;
   }
 
+  #updateStyle () {
+    const validBgcolor = validateCSSRule('background-color', this.attrs.bgcolor) || MARQUEE_ATTRS.bgcolor;
+    this.css`
+      :host {
+        display: inline-block;
+        overflow: hidden;
+        text-align: initial;
+        white-space: nowrap;
+        width: -webkit-fill-available;
+        max-width: 100%;
+        background-color:${validBgcolor};
+      }
+
+      :host([direction="up"]),
+      :host([direction="down"]) {
+        overflow: initial;
+        overflow-y: hidden;
+        white-space: initial;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        :host {
+          overflow-x: auto;
+        }
+
+        :host([direction="up"]),
+        :host([direction="down"]) {
+          overflow-y: scroll;
+        }
+      }`;
+  }
+
   #updateScroll () {
+    this.#updateStyle();
     const scrollAmount = Number(this.attrs.scrollamount);
     const trueSpeed = typeof this.attrs.truespeed === 'string';
     const tempDelay = Number(this.attrs.scrolldelay);
