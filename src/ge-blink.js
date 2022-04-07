@@ -1,6 +1,24 @@
+'use strict';
+
+/**
+ * @file    Recreates the web 1.0 "Blink" feature
+ * @author  Fimion
+ */
+
 import { geoExtendElement } from './ge-shared.js';
 
+/**
+ * Geo extend element description.
+ *
+ * @param  {[type]} 'ge-blink'  [description]
+ * @return {[type]}             [description]
+ */
 export default class GeoElementBlink extends geoExtendElement('ge-blink') {
+  /**
+   * Constructor description.
+   *
+   * @return {[type]} description
+   */
   constructor () {
     super();
     this.css`

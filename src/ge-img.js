@@ -1,3 +1,10 @@
+'use strict';
+
+/**
+ * @file    Handles image related HTML attributes and CSS properties
+ * @author  Fimion
+ */
+
 import { geoExtendElement } from './ge-shared.js';
 
 const IMG_ATTRS = [
@@ -12,6 +19,15 @@ const IMG_ATTRS = [
 
 const DIALUP_TIME = 10000;
 
+/**
+ * Geo extend element description.
+ *
+ * @param  {string}  'ge-img'        [description]
+ * @param  {[type]}  HTMLElement     [description]
+ * @param  {Array}   options.attrs   [description]
+ * @param  {boolean} options.noSlot  [description]
+ * @return {[type]}                  [description]
+ */
 export default class GeoElementImage extends geoExtendElement(
   'ge-img',
   HTMLElement,
@@ -22,6 +38,11 @@ export default class GeoElementImage extends geoExtendElement(
 
   static #promiseList = [Promise.resolve()];
 
+  /**
+   * Constructor description.
+   *
+   * @return {[type]} [description]
+   */
   constructor () {
     super();
 
@@ -43,6 +64,11 @@ export default class GeoElementImage extends geoExtendElement(
     this.shadowRoot.append(this.#image, this.#placeHolder);
   }
 
+  /**
+   * Attribute changed callback description.
+   *
+   * @param {[type]} attr  [description]
+   */
   attributeChangedCallback (attr/* , oldValue, newValue */) {
     this.updateImage();
     if (attr === 'src' || attr === 'srcset') {
@@ -50,20 +76,39 @@ export default class GeoElementImage extends geoExtendElement(
     }
   }
 
+  /**
+   * Animation offset promise description.
+   *
+   * @param  {Promise} finished  [description]
+   * @return {Promise}           [description]
+   */
   #animationOffsetPromise (finished) {
     return new Promise((resolve) => {
       finished.then((result) => resolve(result));
     });
   }
 
+  /**
+   * Animation offset description.
+   *
+   * @param {[type]} finished  [description]
+   */
   set #animationOffset (finished) {
     GeoElementImage.#promiseList.push(this.#animationOffsetPromise(finished));
   }
 
+  /**
+   * Animation offset description.
+   *
+   * @return {[type]} [description]
+   */
   get #animationOffset () {
     return GeoElementImage.#promiseList[GeoElementImage.#promiseList.length - 1];
   }
 
+  /**
+   * Update image description.
+   */
   updateImage () {
     IMG_ATTRS.forEach((attr) => {
       if (this.hasAttribute(attr)) {
@@ -72,6 +117,9 @@ export default class GeoElementImage extends geoExtendElement(
     });
   }
 
+  /**
+   * Update animation description.
+   */
   updateAnimation () {
     this.shadowRoot.append(this.#placeHolder);
     this.#image.classList.add('loading');

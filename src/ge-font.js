@@ -1,11 +1,31 @@
+'use strict';
+
+/**
+ * @file    Handles CSS font styling
+ * @author  Fimion
+ */
+
 import { geoExtendElement, parseCSSList, parseSimpleColor } from './ge-shared.js';
 
+/**
+ * Geo extend element description.
+ *
+ * @param  {string} 'ge-font'      [description]
+ * @param  {[type]} HTMLElement    [description]
+ * @param  {Array}  options.attrs  [description]
+ * @return {[type]}                [description]
+ */
 export default class GeoElementFont extends geoExtendElement(
   'ge-font',
   HTMLElement,
   { attrs: ['face', 'color', 'size'] }
 ) {
   #links;
+  /**
+   * Constructor description.
+   *
+   * @return {[type]} [description]
+   */
   constructor () {
     super();
     this.#links = this.jj.style;
@@ -13,14 +33,26 @@ export default class GeoElementFont extends geoExtendElement(
     document.head.appendChild(this.#links);
   }
 
+  /**
+   * Attribute changed callback description.
+   */
   attributeChangedCallback () {
     this.#updateStyles();
   }
 
+  /**
+   * Create style link description.
+   *
+   * @param  {[type]} href  [description]
+   * @return {[type]}       [description]
+   */
   #createStyleLink (href) {
     return `@import url(${href});`;
   }
 
+  /**
+   * Update styles description.
+   */
   #updateStyles () {
     const face = parseCSSList(this.attrs.face);
     const imports = [];

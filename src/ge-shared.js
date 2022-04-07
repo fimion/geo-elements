@@ -1,6 +1,19 @@
+'use strict';
+
+/**
+ * @file    Shared/Reusable helpers
+ * @author  Fimion
+ */
+
 // Stolen from https://stackoverflow.com/a/39597017
 const PARSE_CSS_LIST = /,(?=(?:(?:[^"']*"[^"']*")|(?:[^'"]*'[^'"]*'))*[^"']*$)/g;
 
+/**
+ * Parse CSS list description.
+ *
+ * @param  {[type]} value  [description]
+ * @return {[type]}        [description]
+ */
 export function parseCSSList (value) {
   if (typeof value !== 'string') {
     return [];
@@ -13,6 +26,13 @@ export function parseCSSList (value) {
 
 const COLOR_PARSE_REGEX = /((^[\w]+$)|(^\#[a-f\d]{3,6}$))/i;
 
+/**
+ * Parse simple color description.
+ *
+ * @param  {[type]} colorString  [description]
+ * @param  {[type]} def          [description]
+ * @return {[type]}              [description]
+ */
 export function parseSimpleColor (colorString, def = undefined) {
   return COLOR_PARSE_REGEX.test(colorString) ? colorString : def;
 }
@@ -46,11 +66,12 @@ export function validateCSSRule (property, value) {
 }
 
 /**
+ * Geo extend element description
  *
- * @param {string} elementName
- * @param {HTMLElement} nativeElement
- * @param {object} options
- * @returns {HTMLElement}
+ * @param  {string}      elementName    [description]
+ * @param  {HTMLElement} nativeElement  [description]
+ * @param  {object}      options        [description]
+ * @return {HTMLElement}                [description]
  */
 export function geoExtendElement (elementName, nativeElement = HTMLElement, options = {}) {
   const { attrs, noSlot } = options;
@@ -150,9 +171,11 @@ export function geoExtendElement (elementName, nativeElement = HTMLElement, opti
     }
 
     /**
+     * Template style description.
      *
-     * @param {Object<String,String>} values
-     * @param {String} styles
+     * @param  {object<string, string>} values  [description]
+     * @param  {string}                 styles  [description]
+     * @return {[type]}                         [description]
      */
     __templateStyle (values, styles) {
       return Object.keys(values).reduce((output, input) => {

@@ -1,4 +1,13 @@
+
+'use strict';
+
+/**
+ * @file    Recreates the web 1.0 "Marquee" feature
+ * @author  Fimion
+ */
+
 import { geoExtendElement, validateCSSRule } from './ge-shared.js';
+
 
 const MARQUEE_ATTRS = {
   behavior: 'scroll',
@@ -15,6 +24,14 @@ const MARQUEE_ATTRS = {
 };
 
 
+/**
+ * Geo extend element description.
+ *
+ * @param  {[type]} 'ge-marquee'   [description]
+ * @param  {[type]} HTMLElement    [description]
+ * @param  {Array}  options.attrs  [description]
+ * @return {[type]}                [description]
+ */
 export default class GeoElementMarqee extends geoExtendElement(
   'ge-marquee',
   HTMLElement,
@@ -24,6 +41,11 @@ export default class GeoElementMarqee extends geoExtendElement(
   #currentAnimation;
   #reducedMotion;
 
+  /**
+   * Constructor description.
+   *
+   * @return {[type]} [description]
+   */
   constructor () {
     super();
     this.#divElement = this.jj.div;
@@ -78,6 +100,9 @@ export default class GeoElementMarqee extends geoExtendElement(
       }`;
   }
 
+  /**
+   * Update scroll description.
+   */
   #updateScroll () {
     this.#updateStyle();
     const scrollAmount = Number(this.attrs.scrollamount);
@@ -141,10 +166,16 @@ export default class GeoElementMarqee extends geoExtendElement(
     });
   }
 
+  /**
+   * Connected callback description.
+   */
   connectedCallback () {
     this.#updateScroll();
   }
 
+  /**
+   * Attribute changed callback description.
+   */
   attributeChangedCallback (/* key */) {
     this.#updateScroll();
   }
