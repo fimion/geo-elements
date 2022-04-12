@@ -1,4 +1,3 @@
-
 'use strict';
 
 /**
@@ -27,10 +26,10 @@ const MARQUEE_ATTRS = {
 /**
  * Geo extend element description.
  *
- * @param  {[type]} 'ge-marquee'   [description]
- * @param  {[type]} HTMLElement    [description]
- * @param  {Array}  options.attrs  [description]
- * @return {[type]}                [description]
+ * @param  {string}      'ge-marquee'   [description]
+ * @param  {HTMLElement} HTMLElement    [description]
+ * @param  {Array}       options.attrs  [description]
+ * @return {[type]}                     [description]
  */
 export default class GeoElementMarqee extends geoExtendElement(
   'ge-marquee',
@@ -57,28 +56,38 @@ export default class GeoElementMarqee extends geoExtendElement(
     this.#reducedMotion = window.matchMedia('(prefers-reduced-motion:reduce)');
 
     this.#reducedMotion.addEventListener('change', this.#updateScroll.bind(this));
+    this.slotElement.addEventListener('slotchange', this.#updateScroll.bind(this));
+    window.addEventListener('resize', this.#updateScroll.bind(this), { passive: true });
   }
 
-  #getScrollWidth () {
-    const div = this.jj.div;
-    div.innerText = this.innerText;
-    this.shadowRoot.append(div);
-    const mySize = div.scrollWidth;
-    this.shadowRoot.removeChild(div);
-    return mySize;
+  /**
+   * @return {number} the current scroll width of the
+   */
+  #getEndScrollX () {
+    return this.#divElement.scrollWidth;
   }
 
+  /**
+   *
+   */
   #updateStyle () {
     const validBgcolor = validateCSSRule('background-color', this.attrs.bgcolor) || MARQUEE_ATTRS.bgcolor;
+    const validHeight = validateCSSRule('height', this.attrs.height + 'px') || MARQUEE_ATTRS.height;
+    const validWidth = validateCSSRule('width', this.attrs.width + 'px') || this.parentNode.offsetWidth + 'px';
     this.css`
       :host {
-        display: inline-block;
+        display: block;
         overflow: hidden;
         text-align: initial;
         white-space: nowrap;
-        width: -webkit-fill-available;
+        width: ${validWidth};
+        height:${validHeight};
         max-width: 100%;
-        background-color:${validBgcolor};
+        background-color: ${validBgcolor};
+      }
+
+      :host>div{
+        display:inline-block;
       }
 
       :host([direction="up"]),
@@ -101,6 +110,22 @@ export default class GeoElementMarqee extends geoExtendElement(
   }
 
   /**
+   * Returns the number of iterations.
+   *
+   * @return {number} the number of iterations
+   */
+  get #iterations () {
+    const iter = parseInt(this.attrs.loop, 10);
+    if (iter <= 0 || Number.isNaN(iter)) {
+      if (this.attrs.behavior === 'slide') {
+        return 1;
+      }
+      return Infinity;
+    }
+    return iter;
+  }
+
+  /**
    * Update scroll description.
    */
   #updateScroll () {
@@ -116,41 +141,98 @@ export default class GeoElementMarqee extends geoExtendElement(
       }
     }
 
-    let start; let end; let duration;
+    let start;
+    let end;
+    let duration;
 
     const dirAttr = this.attrs.direction;
     const direction = ['left', 'right', 'up', 'down'].includes(dirAttr) ? dirAttr : 'left';
+
+    let startPos;
+    let endPos;
+
     switch (direction) {
       case 'up': {
-        start = `translateY(${this.offsetHeight}px)`;
-        end = `translateY(-${this.offsetHeight}px)`;
-        duration = (this.offsetHeight * 2) / (scrollAmount / scrollDelay);
+        startPos = this.offsetHeight;
+        endPos = this.offsetHeight;
+        if (this.attrs.behavior === 'slide') {
+          endPos = 0;
+        }
+        if (this.attrs.behavior === 'alternate') {
+          startPos = this.offsetHeight - this.#divElement.scrollHeight;
+          endPos = 0;
+        }
+        start = `translateY(${startPos}px)`;
+        end = `translateY(-${endPos}px)`;
         break;
       }
       case 'down': {
-        start = `translateY(-${this.offsetHeight}px)`;
-        end = `translateY(${this.offsetHeight}px)`;
-        duration = (this.offsetHeight * 2) / (scrollAmount / scrollDelay);
+        startPos = this.offsetHeight;
+        endPos = this.offsetHeight;
+
+        if (this.attrs.behavior === 'slide') {
+          startPos = this.#divElement.scrollHeight;
+          endPos = (this.#divElement.scrollHeight - this.offsetHeight) * -1;
+        }
+
+        if (this.attrs.behavior === 'alternate') {
+          startPos = 0;
+          endPos = Math.abs(this.offsetHeight - this.#divElement.scrollHeight);
+        }
+        start = `translateY(-${startPos}px)`;
+        end = `translateY(${endPos}px)`;
+
+        if (this.attrs.behavior === 'slide') {
+          startPos = 0;
+          endPos = this.offsetHeight;
+        }
+
         break;
       }
       case 'right': {
-        const width = this.#getScrollWidth();
-        end = `translateX(${this.offsetWidth}px)`;
-        start = `translateX(-${width}px)`;
-        duration = (this.offsetWidth + width) / (scrollAmount / scrollDelay);
+        startPos = this.#getEndScrollX() * -1;
+        endPos = this.offsetWidth;
+        if (this.attrs.behavior === 'slide') {
+          endPos = (this.#divElement.scrollWidth - this.offsetWidth) * -1;
+        }
+        if (this.attrs.behavior === 'alternate') {
+          startPos = 0;
+          endPos = (this.#divElement.scrollWidth - this.offsetWidth) * -1;
+        }
+
+        start = `translateX(${startPos}px)`;
+        end = `translateX(${endPos}px)`;
+
+        if (this.attrs.behavior === 'slide') {
+          startPos = 0;
+          endPos = this.offsetWidth;
+        }
         break;
       }
       case 'left':
       default: {
-        const width = this.#getScrollWidth();
-        start = `translateX(${this.offsetWidth}px)`;
-        end = `translateX(-${width}px)`;
-        duration = (this.offsetWidth + width) / (scrollAmount / scrollDelay);
+        startPos = this.offsetWidth;
+        endPos = this.#getEndScrollX();
+        if (this.attrs.behavior === 'slide') {
+          endPos = 0;
+        }
+        if (this.attrs.behavior === 'alternate') {
+          startPos = (this.#divElement.scrollWidth - this.offsetWidth) * -1;
+          endPos = 0;
+        }
+
+        start = `translateX(${startPos}px)`;
+        end = `translateX(-${endPos}px)`;
+
         break;
       }
     }
-    if (this.#currentAnimation) {this.#currentAnimation.cancel();}
-    console.log(this.#reducedMotion);
+
+    duration = (Math.abs(startPos) + Math.abs(endPos)) / (scrollAmount / scrollDelay);
+
+    if (this.#currentAnimation) {
+      this.#currentAnimation.cancel();
+    }
     if (this.#reducedMotion.matches) {
       this.tabIndex = 1;
       return;
@@ -162,7 +244,9 @@ export default class GeoElementMarqee extends geoExtendElement(
     ],
     {
       duration,
-      iterations: Infinity
+      direction: this.attrs.behavior === 'alternate' ? 'alternate' : 'normal',
+      iterations: this.#iterations,
+      fill: 'forwards'
     });
   }
 
@@ -175,8 +259,11 @@ export default class GeoElementMarqee extends geoExtendElement(
 
   /**
    * Attribute changed callback description.
+   *
+   * @param  key
    */
-  attributeChangedCallback (/* key */) {
+  attributeChangedCallback (key) {
+    console.log(key);
     this.#updateScroll();
   }
 }

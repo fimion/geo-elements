@@ -38,7 +38,7 @@ export function parseSimpleColor (colorString, def = undefined) {
 }
 
 /**
- * @returns {CSSStyleSheet} returns an empty CSSStyleSheet for inserting rules into.
+ * @return {CSSStyleSheet} returns an empty CSSStyleSheet for inserting rules into.
  */
 function getCSSStyleSheet () {
   const stylesheet = document.createElement('style');
@@ -50,8 +50,8 @@ function getCSSStyleSheet () {
 
 /**
  *
- * @param {string} property - css property to be tested
- * @param {string} value - the value to be tested;
+ * @param {string} property  - css property to be tested
+ * @param {string} value     - the value to be tested;
  */
 export function validateCSSRule (property, value) {
   const style = getCSSStyleSheet();
@@ -173,7 +173,7 @@ export function geoExtendElement (elementName, nativeElement = HTMLElement, opti
     /**
      * Template style description.
      *
-     * @param  {object<string, string>} values  [description]
+     * @param  {Object<string, string>} values  [description]
      * @param  {string}                 styles  [description]
      * @return {[type]}                         [description]
      */
