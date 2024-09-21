@@ -68,10 +68,10 @@ export function validateCSSRule (property, value) {
 /**
  * Geo extend element description
  *
- * @param  {string}      elementName    [description]
- * @param  {HTMLElement} nativeElement  [description]
- * @param  {object}      options        [description]
- * @return {HTMLElement}                [description]
+ * @param  {string}                                         elementName      The element name
+ * @param  {HTMLElement} [nativeElement=HTMLElement]  the html element to extend
+ * @param  {object}                                         [options]        Additional options
+ * @return {HTMLElement}                                                     The html element ready to be extended
  */
 export function geoExtendElement (elementName, nativeElement = HTMLElement, options = {}) {
   const { attrs, noSlot } = options;

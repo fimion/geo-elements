@@ -29,13 +29,15 @@ const MARQUEE_ATTRS = {
  * @param  {string}      'ge-marquee'   [description]
  * @param  {HTMLElement} HTMLElement    [description]
  * @param  {Array}       options.attrs  [description]
+ * @extends geoExtendElement
  * @return {[type]}                     [description]
  */
-export default class GeoElementMarqee extends geoExtendElement(
+export default class GeoElementMarquee extends geoExtendElement(
   'ge-marquee',
   HTMLElement,
   { attrs: MARQUEE_ATTRS }
 ) {
+  /** @type HTMLElement */
   #divElement;
   #currentAnimation;
   #reducedMotion;
@@ -48,7 +50,7 @@ export default class GeoElementMarqee extends geoExtendElement(
   constructor () {
     super();
     this.#divElement = this.jj.div;
-    this.#divElement.part = 'wrapper';
+    this.#divElement.part.add('wrapper');
     this.#divElement.append(this.slotElement);
     this.shadowRoot.append(this.#divElement);
     this.#currentAnimation = null;
@@ -154,7 +156,7 @@ export default class GeoElementMarqee extends geoExtendElement(
     switch (direction) {
       case 'up': {
         startPos = this.offsetHeight;
-        endPos = this.offsetHeight;
+        endPos = this.#divElement.scrollHeight;
         if (this.attrs.behavior === 'slide') {
           endPos = 0;
         }
@@ -167,7 +169,7 @@ export default class GeoElementMarqee extends geoExtendElement(
         break;
       }
       case 'down': {
-        startPos = this.offsetHeight;
+        startPos = this.#divElement.scrollHeight;
         endPos = this.offsetHeight;
 
         if (this.attrs.behavior === 'slide') {

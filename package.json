@@ -1,7 +1,8 @@
 {
   "name": "geo-elements",
   "description": "A throw back to the good old days of web 1.0",
-  "version": "0.0.5",
+  "version": "0.0.6",
+  "type": "module",
   "author": "Alex Riviere (https://alex.party)",
   "license": "MIT",
   "main": "dist/geo-elements.iife.js",
@@ -14,13 +15,13 @@
     "fix": "eslint --fix --config=.eslintrc.js .eslintrc.js vite.config.js vite.docs.js src"
   },
   "devDependencies": {
-    "eslint": "^8.11.0",
-    "eslint-config-tjw-base": "^2.0.0",
-    "eslint-config-tjw-import": "^1.0.0",
-    "eslint-config-tjw-jsdoc": "^1.0.0",
-    "eslint-plugin-import": "^2.25.4",
-    "eslint-plugin-jsdoc": "^38.0.4",
-    "sass": "^1.43.4",
-    "vite": "^2.6.4"
+    "eslint": "^9.11.0",
+    "@eslint/js": "^9.11.0",
+    "@eslint/eslintrc": "^3.1.0",
+    "eslint-config-tjw-base": "^3.0.1",
+    "eslint-config-tjw-jsdoc": "^1.0.5",
+    "eslint-plugin-jsdoc": "^50.2.4",
+    "sass": "^1.79.3",
+    "vite": "5.4.7"
   }
 }
